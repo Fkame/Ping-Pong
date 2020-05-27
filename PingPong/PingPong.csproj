@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BallHelper.cs" />
     <Compile Include="Ball_Methods_and_Constructors.cs" />
     <Compile Include="Ball_Properties.cs" />
     <Compile Include="Form1.cs">

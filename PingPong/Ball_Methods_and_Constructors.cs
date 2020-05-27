@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace PingPong
 {
     partial class Ball
     {
-        public Ball() : this(10) { }
+        public Ball() : this(20) { }
         public Ball(int radius) : this(radius, 10, 10) { }
         public Ball(int radius, int coordOfCenterX, int coordOfCenterY)
-            : this(radius, coordOfCenterX, coordOfCenterY, System.Drawing.Color.BurlyWood) { }
+            : this(radius, coordOfCenterX, coordOfCenterY, System.Drawing.Color.Chocolate) { }
         public Ball(int radius, int coordOfCenterX, int coordOfCenterY, System.Drawing.Color color)
         {
             this.Radius = radius;
