@@ -26,9 +26,10 @@ namespace PingPong
             /*
              * Для немного большей интеллектуальности добавим возможность сдвига не в ту сторону или пропуска хода
              */
+            Random r = new Random();
             if (yMidBall < figure.Bottom)
             {
-                this.figure.Y -= speed;
+                this.figure.Y -= speed;     
             }
             else
             {

@@ -30,16 +30,33 @@ namespace PingPong
          */
         public static (int stepX, int stepY) generateRandomSteps()
         {
+            Console.WriteLine("Generating steps...");
             Random r = new Random();
-            int stepX = r.Next(-10, 10);
-            stepX = (stepX == 0) ? 1 : stepX;
-            int stepY = r.Next(-10, 10);
-            stepY = (stepY == 0) ? 3 : stepY;
+            int stepX = 0;
+            int stepY = 0;
 
-            int nod = NOD(stepX, stepY);
-            stepX = stepX / nod;
-            stepY = stepY / nod;
+            int limit = 0;
+            while (stepX < stepY |
+                (double)Math.Abs(stepX) / Math.Abs(stepY) < 1.5 |
+                stepX < 3)
+            {
+                if (++limit > 20)
+                {
+                    stepX = 6;
+                    stepY = 2;
+                    break;
+                }
+                stepX = r.Next(-10, 10);
+                stepX = (stepX == 0) ? 3 : stepX;
+                stepY = r.Next(-10, 10);
+                stepY = (stepY == 0) ? 1 : stepY;
 
+                int nod = NOD(stepX, stepY);
+                stepX = stepX / nod;
+                stepY = stepY / nod;
+            }
+
+            Console.WriteLine(stepX + ", " + stepY);
             return (stepX, stepY);
         }
 

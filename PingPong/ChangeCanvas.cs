@@ -79,8 +79,11 @@ namespace PingPong
 
             // Увеличение скорости мяча
             counter += timer1.Interval;
+
+            Console.WriteLine("count = {0}", counter);
             if (counter >= MSECONDSTOSPEEDUP)
             {
+                Console.WriteLine("\nSpeedUp! Interval = {0}\n", timer1.Interval);
                 counter = 0;
                 aiPlayer.upgradeAISpeed();
                 this.speedUpAnimation();
@@ -94,10 +97,10 @@ namespace PingPong
         {
             if (timer1.Interval == 1)
             {
-                if (ball.Steps.stepX < 10 & ball.Steps.stepY < 10)
+                if (ball.Steps.stepX < 20 & ball.Steps.stepY < 20)
                 {
-                    ball.Steps.stepX += 1;
-                    ball.Steps.stepY += 1;
+                    ball.Steps.stepX += (int)(ball.Steps.stepX * 0.2);
+                    ball.Steps.stepY += (int)(ball.Steps.stepY * 0.2);
                 }
             }
             else
@@ -116,9 +119,11 @@ namespace PingPong
 
             //Cursor.Hide();
 
+            Console.WriteLine("Form load");
             ball = BallHelper.generateRandomBallInMiddle(pictureBox1.Width / 2, pictureBox1.Width / 2, 
                 0, pictureBox1.Height);
 
+            Console.WriteLine("Ball created");
             int width = 20;
             int height = 100;
 
