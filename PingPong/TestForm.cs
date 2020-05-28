@@ -59,6 +59,49 @@ namespace PingPong
 
             int newLeftBorderX = newX - ball.Radius;
             int newRightBorderX = newX + ball.Radius;
+
+            int newTopBorderY = newY - ball.Radius;
+            int newBottomBorderY = newY + ball.Radius;
+
+            // Если шар пытается преодолеть 2 границы сразу
+            if (newLeftBorderX <= 0 & newTopBorderY <= 0)
+            {
+                ball.CoordOfCenterX = 0 + ball.Radius;
+                ball.CoordOfCenterY = 0 + ball.Radius;
+                ball.steps.stepX = -ball.steps.stepX;
+                ball.steps.stepY = -ball.steps.stepY;
+                panel1.Invalidate();
+                return;
+            }
+            if (newLeftBorderX <= 0 & newBottomBorderY >= panel1.Width)
+            {
+                ball.CoordOfCenterX = 0 + ball.Radius;
+                ball.CoordOfCenterY = panel1.Height - ball.Radius;
+                ball.steps.stepX = -ball.steps.stepX;
+                ball.steps.stepY = -ball.steps.stepY;
+                panel1.Invalidate();
+                return;
+            }
+            if (newRightBorderX >= panel1.Width & newTopBorderY <= 0)
+            {
+                ball.CoordOfCenterX = panel1.Width - ball.Radius;
+                ball.CoordOfCenterY = 0 + ball.Radius;
+                ball.steps.stepX = -ball.steps.stepX;
+                ball.steps.stepY = -ball.steps.stepY;
+                panel1.Invalidate();
+                return;
+            }
+            if (newRightBorderX >= panel1.Width & newBottomBorderY >= panel1.Height)
+            {
+                ball.CoordOfCenterX = panel1.Width - ball.Radius;
+                ball.CoordOfCenterY = panel1.Height - ball.Radius;
+                ball.steps.stepX = -ball.steps.stepX;
+                ball.steps.stepY = -ball.steps.stepY;
+                panel1.Invalidate();
+                return;
+            }
+
+            // Если шар пытается пересечь левую или правую границы
             if (newLeftBorderX <= 0)
             {
                 ball.CoordOfCenterX = 0 + ball.Radius;
@@ -76,8 +119,7 @@ namespace PingPong
                 return;
             }
 
-            int newTopBorderY = newY - ball.Radius;
-            int newBottomBorderY = newY + ball.Radius;
+            // Если шар пытается преодолеть верхюю или нижнюю границы
             if (newTopBorderY <= 0)
             {
                 ball.CoordOfCenterX = newX;
@@ -103,10 +145,10 @@ namespace PingPong
 
             
             counter += timer1.Interval;
-            if (counter >= 5000)
+            if (counter >= 3000)
             {
                 counter = 0;
-                timer1.Interval = timer1.Interval / 2;
+                if (timer1.Interval != 1) timer1.Interval = timer1.Interval / 2;
                 if (timer1.Interval <= 10)
                 {
                     ball.steps.stepX *= 2;
