@@ -6,14 +6,15 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PingPong
 {
     class Player
     {
-        private Rectangle figure;
-        private SolidBrush brush;
-        private System.Drawing.Color color;
+        protected Rectangle figure;
+        protected SolidBrush brush;
+        protected System.Drawing.Color color;
         public System.Drawing.Color Color { 
             get { return this.color; }
             set 
@@ -22,6 +23,8 @@ namespace PingPong
                 brush = new SolidBrush(value);
             } 
         }
+
+        public Player() { }
 
         public Player (int startPositionX, int startPositionY, int width, int height)
             : this(startPositionX, startPositionY, width, height, System.Drawing.Color.Black) { }

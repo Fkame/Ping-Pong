@@ -17,13 +17,13 @@ namespace PingPong
     {
         private Ball ball;
         private Player player;
+        private AIPlayer aiPlayer;
 
         // Контроль ускорения мячика в процессе игры
         private int counter = 0;
         private const int MSECONDSTOSPEEDUP = 500;
 
         private const int MIDLINEWIDTH = 6;
-        //private Rectangle MidLine = new Rectangle();
 
         public ChangeCanvas()
         {
@@ -49,27 +49,40 @@ namespace PingPong
             // Отрисовка мяча
             ball.drawYourSelf(g);
 
-            // Отрисовка игрока
+            // Отрисовка игроков
             player.drawYourSelf(g);
+            aiPlayer.drawYourSelf(g);
         }
 
+        /*
+         * Отвечает за движения мяча и ИИ-игрока
+         */
         private void timer1_Tick(object sender, EventArgs e)
         {
+            // Следующие координаты центра мяча
             int newX = ball.CoordOfCenterX + ball.Steps.stepX;
             int newY = ball.CoordOfCenterY + ball.Steps.stepY;
 
-            if (!BallHelper.makeARebountFromPlayerIfNeed(ball, player) &
-                !BallHelper.makeARebountFromWalls(ball, pictureBox1))
+            // Отскакивание мяча от стен и игроков
+            if (!BallHelper.makeARebountFromWalls(ball, pictureBox1))
             {
-                ball.CoordOfCenterX = newX;
-                ball.CoordOfCenterY = newY;
+                if (!BallHelper.makeARebountFromPlayerIfNeed(ball, player) &
+                    !BallHelper.makeARebountFromPlayerIfNeed(ball, aiPlayer))
+                {
+                    ball.CoordOfCenterX = newX;
+                    ball.CoordOfCenterY = newY;
+                }
             }
+
+            // Ход ИИ
+            aiPlayer.makeAIMove(ball);
 
             // Увеличение скорости мяча
             counter += timer1.Interval;
             if (counter >= MSECONDSTOSPEEDUP)
             {
                 counter = 0;
+                aiPlayer.upgradeAISpeed();
                 this.speedUpAnimation();
             }
 
@@ -108,9 +121,16 @@ namespace PingPong
 
             int width = 20;
             int height = 100;
+
+            // Создание игрока
             int xCoord = pictureBox1.Width - 2 * width;
             int yCoord = pictureBox1.Height / 2 - height / 2;
             player = new Player(xCoord, yCoord, width, height);
+
+            // Создание ИИ игрока
+            xCoord = 0 + width;
+            yCoord = pictureBox1.Height / 2 - height / 2;
+            aiPlayer = new AIPlayer(xCoord, yCoord, width, height);
 
             /*
              * pictureBox1.PointToClient(Cursor.Position) - проецирует расположение курсора на экране в разположение на элементе

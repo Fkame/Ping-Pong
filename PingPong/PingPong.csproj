@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AIPlayer.cs" />
     <Compile Include="BallHelper.cs" />
     <Compile Include="Ball_Methods_and_Constructors.cs" />
     <Compile Include="Ball_Properties.cs" />
