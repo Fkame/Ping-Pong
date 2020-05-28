@@ -6,32 +6,39 @@ using System.Threading.Tasks;
 
 using System.Drawing;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace PingPong
 {
     class AIPlayer : Player
     {
-        public int speed = 2;
+        public int speed = 5;
         public AIPlayer(int xCoord, int yCoord, int width, int height) : base(xCoord, yCoord, width, height)
         { }
 
         /*
         * Двигается по ОСИ OY за мячём
         */
-        public void makeAIMove(Ball ball)
+        public void makeAIMove(Ball ball, PictureBox area)
         {
             int yMidBall = ball.CoordOfCenterY;
-            int yMidStick = figure.Y - figure.Height / 2;
+            int yMidStick = figure.Y + figure.Height / 2;
 
-            if (figure.Contains(figure.X, yMidBall)) return;
+            int ballBottom = ball.CoordOfCenterY + ball.Radius;
+            int ballTop = ball.CoordOfCenterY + ball.Radius;
 
-            if (yMidBall < figure.Bottom)
+            /*
+             * Проверка границ
+             */
+            if (yMidStick > yMidBall & yMidStick - yMidBall > ball.Radius / 3)
             {
-                this.figure.Y -= speed;     
+                if (figure.Top - speed >= 0) figure.Y -= speed;
+                return;
             }
-            else
+            if (yMidStick < yMidBall & yMidBall - yMidStick > ball.Radius / 3)
             {
-                this.figure.Y += speed;
+                if (figure.Bottom + speed <= area.Height) figure.Y += speed;
+                return;
             }
         }
     }

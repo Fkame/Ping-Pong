@@ -50,12 +50,6 @@
     <Compile Include="BallHelper.cs" />
     <Compile Include="Ball_Methods_and_Constructors.cs" />
     <Compile Include="Ball_Properties.cs" />
-    <Compile Include="ChangeCanvas.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ChangeCanvas.Designer.cs">
-      <DependentUpon>ChangeCanvas.cs</DependentUpon>
-    </Compile>
     <Compile Include="Ping-Pong-Field.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,9 +60,6 @@
     <Compile Include="ScorePanel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ChangeCanvas.resx">
-      <DependentUpon>ChangeCanvas.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Ping-Pong-Field.resx">
       <DependentUpon>Ping-Pong-Field.cs</DependentUpon>
     </EmbeddedResource>

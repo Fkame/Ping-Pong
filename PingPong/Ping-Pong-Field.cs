@@ -179,7 +179,7 @@ namespace PingPong
         private void timer3_Tick(object sender, EventArgs e)
         {
             // Ход ИИ
-            aiPlayer.makeAIMove(ball);
+            aiPlayer.makeAIMove(ball, pictureBox1);
 
             // Перерисовка
             pictureBox1.Invalidate();
@@ -231,7 +231,7 @@ namespace PingPong
             timer1.Start();
             timer2.Start();
 
-            timer3.Interval = 1;
+            timer3.Interval = 20;
             timer3.Start();
         }
     }
