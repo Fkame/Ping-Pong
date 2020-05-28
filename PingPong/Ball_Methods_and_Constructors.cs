@@ -10,6 +10,12 @@ using System.Drawing;
 
 namespace PingPong
 {
+    /// <summary>
+    /// Часть класса мяча, включающая конструкторы и методы
+    /// </summary>
+    /// <remarks>
+    /// Может: определить вхождение точки в пределы круга, нарисовать себя
+    /// </remarks>
     partial class Ball
     {
         public Ball(int radius, int coordOfCenterX, 

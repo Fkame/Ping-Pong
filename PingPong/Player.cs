@@ -10,6 +10,15 @@ using System.Windows.Forms;
 
 namespace PingPong
 {
+    /// <summary>
+    /// Класс, реализующий планку-игрока
+    /// </summary>
+    /// <remarks>
+    /// Планка стоит из: прямоугольника (figure), кисти (Brush), цвета (Color).
+    /// Планка может: изменить позицию в пространстве на координатам, 
+    /// изменить позицию по координатам потенциальной середины фигуры, входит ли точка в пределы планки,
+    /// нарисовать себя.
+    /// </remarks>
     class Player
     {
         protected Rectangle figure;
@@ -63,7 +72,11 @@ namespace PingPong
             return new Point(figure.X + figure.Width / 2, figure.Y + figure.Height / 2);
         }
 
-        // Вычисляет x и y угловые точки прямоугольника по заданной середине прямоугольника
+        /// <summary>
+        /// Сдивнуть центр прямоуголька по заданным коорднатам
+        /// </summary>
+        /// <param name="midX">Новая середина прямоугольника оп OX</param>
+        /// <param name="midY">Новая середина прямоугольника оп OY</param>
         public void changeLocationByMiddlePosition(int midX, int midY)
         {
             figure.X = midX - figure.Width / 2;

@@ -7,8 +7,16 @@ using System.Windows.Forms;
 
 namespace PingPong
 {
+    /// <summary>
+    /// Класс BallHelper являеся абстрактным, и содержит только статические методы.
+    /// Он реализует дополнительные операции над Ball, которые дополняют функционал Ball.
+    /// </summary>
     abstract class BallHelper
     {
+        /// <summary>
+        /// Этот метод генерирует случайный цвет, и передаёт его в виде члена структуры
+        /// </summary>
+        /// <returns> Возвращает случайно сгенереированый цвет</returns>
         public static System.Drawing.Color getRandomColor()
         {
             Random r = new Random();
@@ -16,6 +24,15 @@ namespace PingPong
             return color;
         }
 
+        /// <summary>
+        /// Этот метод генерирует случайную точку на основе входящих ограничений по осям. 
+        /// Т.е. он генерирует точку в определяемом входными параметрами прямоугольнике.
+        /// </summary>
+        /// <param name="x1">Левая граница генерации x-значения</param>
+        /// <param name="x2">Права граница генерации x-значения</param>
+        /// <param name="y1">Верхняя граница генерации y-значения</param>
+        /// <param name="y2">Нижняя граница генерации y-значения</param>
+        /// <returns>Возвращает кортеж из x и y значения точки</returns>
         public static (int x, int y) generateRandomPosition(int x1, int x2, int y1, int y2)
         {
             Random r = new Random();
@@ -25,9 +42,12 @@ namespace PingPong
             return (x, y);
         }
 
-        /*
-         * Генерируются случайные числа - шаги в пикселях по OX и OY и по возможности сокращаются
-         */
+        /// <summary>
+        /// Генерирует случайные числа, которые в последствии станут шагами (скоростями, смещениями) 
+        /// передвижения шара по полю. Это те числа, которые описывают, на сколько и в какую сторону будет
+        /// сдвигаться шар при каждом "тике" таймера
+        /// </summary>
+        /// <returns>Возвращает пару смещений по x, y</returns>
         public static (int stepX, int stepY) generateRandomSteps()
         {
             Random r = new Random();
@@ -58,6 +78,12 @@ namespace PingPong
             return (stepX, stepY);
         }
 
+        /// <summary>
+        /// Алгоритм Евклида по нахождению общего делителя. Применяется для сокращения смещений.
+        /// </summary>
+        /// <param name="a">Первое число для нахождения НОД</param>
+        /// <param name="b">Второе число для нахождения НОД</param>
+        /// <returns>Их общий наибольший делитель</returns>
         private static int NOD(int a, int b)
         {
             a = Math.Abs(a);
@@ -70,9 +96,17 @@ namespace PingPong
                     b = b - a;
             }
             return b;
-        }        
+        }
 
-        public static Ball generateRandomBallInMiddle(int leftLimit, int rightLimit, int topLimit, int bottomLimit)
+        /// <summary>
+        /// Создаёт объект "Мяч" со случайными характеристиками в заданных пределах по OX и OY
+        /// </summary>
+        /// <param name="leftLimit">Левая граница генерации x-значения</param>
+        /// <param name="rightLimit">Правая граница генерации x-значения</param>
+        /// <param name="topLimit">Верхняя граница генерации y-значения</param>
+        /// <param name="bottomLimit">Нижняя граница генерации y-значения</param>
+        /// <returns>Возвращает готовый к использованию объект типа Ball</returns>
+        public static Ball generateRandomBall(int leftLimit, int rightLimit, int topLimit, int bottomLimit)
         {
             int radius = 20;
 
@@ -90,6 +124,13 @@ namespace PingPong
             return ball;
         }
 
+        /// <summary>
+        /// Определяет сталкивается ли мяч с какой-либо гранью входещей ракетки,
+        /// и если да - обрабатывает "отскок" от одной из граней ракетки
+        /// </summary>
+        /// <param name="ball">Игровой мяч</param>
+        /// <param name="player">Ракетка, который управляет игрок, или AI</param>
+        /// <returns>Сталкивается ли ракетка с мяём в следущем координате движения мяча</returns>
         public static bool makeARebountFromPlayerIfNeed(Ball ball, Player player) 
         {
             int newX = ball.CoordOfCenterX + ball.Steps.stepX;
@@ -136,6 +177,13 @@ namespace PingPong
             return false;
         }
 
+        /// <summary>
+        /// Определяет, сталкивается ли мяч с верхней или нижней стеной при следующем шаге, если да,
+        /// обрабатывает "отскок" мяча от соответствующей стены
+        /// </summary>
+        /// <param name="ball">Игровой мя</param>
+        /// <param name="pictureBox1">Игровое поле</param>
+        /// <returns>Сталкивается ли мяч с верхней или нижней стеной в следущем координате движения мяча</returns>
         public static bool makeARebountFromWalls(Ball ball, PictureBox pictureBox1)
         {
             int newX = ball.CoordOfCenterX + ball.Steps.stepX;

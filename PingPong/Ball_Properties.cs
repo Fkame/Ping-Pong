@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace PingPong
 {
+    /// <summary>
+    /// Часть класса мяча, включающая поля и свойства
+    /// </summary>
+    /// <remarks>
+    /// Имеет: координаты середины мяча, радиус мяча, цвет, кисть, кортеж из сдвигов мяча при прижении.
+    /// </remarks>
     partial class Ball
     {
         private int radius;
@@ -42,7 +48,6 @@ namespace PingPong
             set
             {
                 if (value >= 0) this.coordOfCenterX = value;
-                //else throw new ArgumentException("No-no-no, not lower that 0");
             }
         }
 
@@ -52,7 +57,6 @@ namespace PingPong
             set
             {
                 if (value >= 0) this.coordOfCenterY = value;
-                //else throw new ArgumentException("No-no-no, not lower that 0");
             }
         }
     }

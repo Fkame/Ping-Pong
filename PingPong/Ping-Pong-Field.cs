@@ -203,7 +203,7 @@ namespace PingPong
          */
         private void initializeElementsOnStart()
         {
-            ball = BallHelper.generateRandomBallInMiddle(pictureBox1.Width / 2, pictureBox1.Width / 2,
+            ball = BallHelper.generateRandomBall(pictureBox1.Width / 2, pictureBox1.Width / 2,
                 0, pictureBox1.Height);
 
             int width = 20;
