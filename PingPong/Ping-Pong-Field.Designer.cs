@@ -69,14 +69,15 @@
             // 
             this.timer3.Tick += new System.EventHandler(this.timer3_Tick);
             // 
-            // ChangeCanvas
+            // Ping_Pong_Field
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
-            this.Name = "ChangeCanvas";
+            this.Name = "Ping_Pong_Field";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ping-Pong";
             this.Load += new System.EventHandler(this.Ping_Pong_Field_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
