@@ -63,6 +63,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Player.cs" />
+    <Compile Include="ScorePanel.cs" />
     <Compile Include="TestForm.cs">
       <SubType>Form</SubType>
     </Compile>

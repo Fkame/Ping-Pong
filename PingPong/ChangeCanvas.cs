@@ -18,10 +18,12 @@ namespace PingPong
         private Ball ball;
         private Player player;
         private AIPlayer aiPlayer;
+        private ScorePanel scorePanel;
 
         // Контроль ускорения мячика в процессе игры
         private const int MSECONDSTOSPEEDUP = 1000;
 
+        // Ширина средней линии
         private const int MIDLINEWIDTH = 6;
 
         public ChangeCanvas()
@@ -61,6 +63,21 @@ namespace PingPong
             // Следующие координаты центра мяча
             int newX = ball.CoordOfCenterX + ball.Steps.stepX;
             int newY = ball.CoordOfCenterY + ball.Steps.stepY;
+
+            int newLeftBorderX = newX - ball.Radius;
+            int newRightBorderX = newX + ball.Radius;
+
+            // Забите гола - боковые стены
+            if (newLeftBorderX <= 0)
+            {
+                scoreUp(true);
+                return;
+            }
+            if (newRightBorderX >= pictureBox1.Width)
+            {
+                scoreUp(false);
+                return;
+            }
 
             // Отскакивание мяча от стен и игроков
             if (!BallHelper.makeARebountFromWalls(ball, pictureBox1))
@@ -107,40 +124,10 @@ namespace PingPong
         {
             AllocConsole();
 
+            scorePanel = new ScorePanel();
             //Cursor.Hide();
 
-            Console.WriteLine("Form load");
-            ball = BallHelper.generateRandomBallInMiddle(pictureBox1.Width / 2, pictureBox1.Width / 2, 
-                0, pictureBox1.Height);
-
-            Console.WriteLine("Ball created");
-            int width = 20;
-            int height = 100;
-
-            // Создание игрока
-            int xCoord = pictureBox1.Width - 2 * width;
-            int yCoord = pictureBox1.Height / 2 - height / 2;
-            player = new Player(xCoord, yCoord, width, height);
-
-            // Создание ИИ игрока
-            xCoord = 0 + width;
-            yCoord = pictureBox1.Height / 2 - height / 2;
-            aiPlayer = new AIPlayer(xCoord, yCoord, width, height);
-
-            /*
-             * pictureBox1.PointToClient(Cursor.Position) - проецирует расположение курсора на экране в разположение на элементе
-             * pictureBox1.PointToScreen(Cursor.Position) - обратное от предыдущего преобразование
-             */
-            Cursor.Position = pictureBox1.PointToScreen(player.getMiddlePoint());
-
-            timer2.Interval = MSECONDSTOSPEEDUP;
-            timer1.Interval = 20;
-
-            timer1.Start();
-            timer2.Start();
-
-            timer3.Interval = 1;
-            timer3.Start();
+            this.initializeElementsOnStart();
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]
@@ -195,6 +182,56 @@ namespace PingPong
 
             // Перерисовка
             pictureBox1.Invalidate();
+        }
+
+        /*
+         * Срабатывает при забитии гола
+         */
+        private void scoreUp(bool isPlayer)
+        { 
+            initializeElementsOnStart();
+
+            if (isPlayer) scorePanel.Player1++;
+            else scorePanel.PlayerAI++;
+
+            label1.Text = scorePanel.ToString();
+        }
+
+        /*
+         * Расположение в начальном положении (на старте и при забитии гола) 
+         */
+        private void initializeElementsOnStart()
+        {
+            ball = BallHelper.generateRandomBallInMiddle(pictureBox1.Width / 2, pictureBox1.Width / 2,
+                0, pictureBox1.Height);
+
+            int width = 20;
+            int height = 100;
+
+            // Создание игрока
+            int xCoord = pictureBox1.Width - 2 * width;
+            int yCoord = pictureBox1.Height / 2 - height / 2;
+            player = new Player(xCoord, yCoord, width, height);
+
+            // Создание ИИ игрока
+            xCoord = 0 + width;
+            yCoord = pictureBox1.Height / 2 - height / 2;
+            aiPlayer = new AIPlayer(xCoord, yCoord, width, height);
+
+            /*
+             * pictureBox1.PointToClient(Cursor.Position) - проецирует расположение курсора на экране в разположение на элементе
+             * pictureBox1.PointToScreen(Cursor.Position) - обратное от предыдущего преобразование
+             */
+            Cursor.Position = pictureBox1.PointToScreen(player.getMiddlePoint());
+
+            timer2.Interval = MSECONDSTOSPEEDUP;
+            timer1.Interval = 20;
+
+            timer1.Start();
+            timer2.Start();
+
+            timer3.Interval = 1;
+            timer3.Start();
         }
     }
 }

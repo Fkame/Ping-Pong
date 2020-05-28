@@ -145,61 +145,8 @@ namespace PingPong
             int newX = ball.CoordOfCenterX + ball.Steps.stepX;
             int newY = ball.CoordOfCenterY + ball.Steps.stepY;
 
-            int newLeftBorderX = newX - ball.Radius;
-            int newRightBorderX = newX + ball.Radius;
             int newTopBorderY = newY - ball.Radius;
             int newBottomBorderY = newY + ball.Radius;
-
-            // Если шар пытается преодолеть 2 границы сразу
-
-            if (newLeftBorderX <= 0 & newTopBorderY <= 0)
-            {
-                ball.CoordOfCenterX = 0 + ball.Radius;
-                ball.CoordOfCenterY = 0 + ball.Radius;
-                ball.Steps.stepX = -ball.Steps.stepX;
-                ball.Steps.stepY = -ball.Steps.stepY;
-                return true;
-            }
-            if (newLeftBorderX <= 0 & newBottomBorderY >= pictureBox1.Width)
-            {
-                ball.CoordOfCenterX = 0 + ball.Radius;
-                ball.CoordOfCenterY = pictureBox1.Height - ball.Radius;
-                ball.Steps.stepX = -ball.Steps.stepX;
-                ball.Steps.stepY = -ball.Steps.stepY;
-                return true;
-            }
-            if (newRightBorderX >= pictureBox1.Width & newTopBorderY <= 0)
-            {
-                ball.CoordOfCenterX = pictureBox1.Width - ball.Radius;
-                ball.CoordOfCenterY = 0 + ball.Radius;
-                ball.Steps.stepX = -ball.Steps.stepX;
-                ball.Steps.stepY = -ball.Steps.stepY;
-                return true;
-            }
-            if (newRightBorderX >= pictureBox1.Width & newBottomBorderY >= pictureBox1.Height)
-            {
-                ball.CoordOfCenterX = pictureBox1.Width - ball.Radius;
-                ball.CoordOfCenterY = pictureBox1.Height - ball.Radius;
-                ball.Steps.stepX = -ball.Steps.stepX;
-                ball.Steps.stepY = -ball.Steps.stepY;
-                return true;
-            }
-
-            // Если шар пытается пересечь левую или правую границы
-            if (newLeftBorderX <= 0)
-            {
-                ball.CoordOfCenterX = 0 + ball.Radius;
-                ball.CoordOfCenterY = newY;
-                ball.Steps.stepX = -ball.Steps.stepX;
-                return true;
-            }
-            if (newRightBorderX >= pictureBox1.Width)
-            {
-                ball.CoordOfCenterX = pictureBox1.Width - ball.Radius;
-                ball.CoordOfCenterY = newY;
-                ball.Steps.stepX = -ball.Steps.stepX;
-                return true;
-            }
 
             // Если шар пытается преодолеть верхюю или нижнюю границы
             if (newTopBorderY <= 0)

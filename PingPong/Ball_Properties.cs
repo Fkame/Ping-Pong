@@ -42,7 +42,7 @@ namespace PingPong
             set
             {
                 if (value >= 0) this.coordOfCenterX = value;
-                else throw new ArgumentException("No-no-no, not lower that 0");
+                //else throw new ArgumentException("No-no-no, not lower that 0");
             }
         }
 
@@ -52,7 +52,7 @@ namespace PingPong
             set
             {
                 if (value >= 0) this.coordOfCenterY = value;
-                else throw new ArgumentException("No-no-no, not lower that 0");
+                //else throw new ArgumentException("No-no-no, not lower that 0");
             }
         }
     }
