@@ -20,8 +20,7 @@ namespace PingPong
         private AIPlayer aiPlayer;
 
         // Контроль ускорения мячика в процессе игры
-        private int counter = 0;
-        private const int MSECONDSTOSPEEDUP = 500;
+        private const int MSECONDSTOSPEEDUP = 1000;
 
         private const int MIDLINEWIDTH = 6;
 
@@ -77,18 +76,6 @@ namespace PingPong
             // Ход ИИ
             aiPlayer.makeAIMove(ball);
 
-            // Увеличение скорости мяча
-            counter += timer1.Interval;
-
-            Console.WriteLine("count = {0}", counter);
-            if (counter >= MSECONDSTOSPEEDUP)
-            {
-                Console.WriteLine("\nSpeedUp! Interval = {0}\n", timer1.Interval);
-                counter = 0;
-                aiPlayer.upgradeAISpeed();
-                this.speedUpAnimation();
-            }
-
             // Перерисовка
             pictureBox1.Invalidate();
         }
@@ -97,10 +84,10 @@ namespace PingPong
         {
             if (timer1.Interval == 1)
             {
-                if (ball.Steps.stepX < 20 & ball.Steps.stepY < 20)
+                if (Math.Abs(ball.Steps.stepX) < 20 & Math.Abs(ball.Steps.stepY) < 20)
                 {
-                    ball.Steps.stepX += (int)(ball.Steps.stepX * 0.2);
-                    ball.Steps.stepY += (int)(ball.Steps.stepY * 0.2);
+                    ball.Steps.stepX += (int)Math.Floor(ball.Steps.stepX * 0.2);          
+                    ball.Steps.stepY += (int)Math.Floor(ball.Steps.stepY * 0.2);    
                 }
             }
             else
@@ -143,8 +130,10 @@ namespace PingPong
              */
             Cursor.Position = pictureBox1.PointToScreen(player.getMiddlePoint());
 
+            timer2.Interval = MSECONDSTOSPEEDUP;
+            timer1.Interval = 20;
             timer1.Start();
-            timer1.Interval = 30;
+            timer2.Start();
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]
@@ -178,6 +167,16 @@ namespace PingPong
             // Вычисляет x и y угловые точки прямоугольника по заданной середине прямоугольника
             player.changeLocationByMiddlePosition(l.X, l.Y);        
             pictureBox1.Invalidate();
+        }
+
+        /*
+         * Отвечает за увеличение скорости анимации
+         */
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            speedUpAnimation();
+            Console.WriteLine("TimeUp! StepX = {0}, StepY = {1}", ball.Steps.stepX, ball.Steps.stepY);
+            aiPlayer.upgradeAISpeed();
         }
     }
 }
