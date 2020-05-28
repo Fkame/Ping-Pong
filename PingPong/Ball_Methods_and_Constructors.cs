@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
+using System.Drawing;
+
 namespace PingPong
 {
     partial class Ball
@@ -34,6 +36,13 @@ namespace PingPong
             int r = this.Radius;
             return (Math.Pow((x - x0), 2) + Math.Pow((y - y0), 2) <= r * r);
         }
-        
-     }
+
+        public void drawYourSelf(System.Drawing.Graphics g)
+        {
+            int x = CoordOfCenterX - Radius;
+            int y = CoordOfCenterY - Radius;
+            Rectangle rect = new Rectangle(x, y, 2 * Radius, 2 * Radius);
+            g.FillEllipse(this.brush, rect);
+        }
+    }
 }

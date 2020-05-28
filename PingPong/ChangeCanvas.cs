@@ -45,12 +45,7 @@ namespace PingPong
             g.DrawLine(endPen, new Point(pictureBox1.Width, 0), new Point(pictureBox1.Width, pictureBox1.Height));
 
             // Отрисовка мяча
-            int x = ball.CoordOfCenterX - ball.Radius;
-            int y = ball.CoordOfCenterY - ball.Radius;
-
-            SolidBrush brush = new SolidBrush(ball.ColorOfBall);
-            Rectangle rect = new Rectangle(x, y, 2 * ball.Radius, 2 * ball.Radius);
-            g.FillEllipse(brush, rect);
+            ball.drawYourSelf(g);
 
             // Отрисовка игрока
             player.drawYourSelf(g);
@@ -170,7 +165,6 @@ namespace PingPong
                 if (timer1.Interval >= 6) timer1.Interval -= 5;
                 else timer1.Interval = 1;
             }
-
         }
 
         /*
@@ -192,14 +186,15 @@ namespace PingPong
             player = new Player(xCoord, yCoord, width, height);
 
             Point mid = player.getMiddlePoint();
-            Console.WriteLine($"init mid point {mid}");
-            Console.WriteLine($"init player point {player.getLocation()}");
+            //Console.WriteLine($"init mid point {mid}");
+            //Console.WriteLine($"init player point {player.getLocation()}");
+
             /*
              * pictureBox1.PointToClient(Cursor.Position) - проецирует расположение курсора на экране в разположение на элементе
              * pictureBox1.PointToScreen(Cursor.Position) - обратное от предыдущего преобразование
              */
             Cursor.Position = pictureBox1.PointToScreen(mid);
-            Console.WriteLine($"init curse points {pictureBox1.PointToClient(Cursor.Position)}");
+            //Console.WriteLine($"init curse points {pictureBox1.PointToClient(Cursor.Position)}");
 
             timer1.Start();
             timer1.Interval = 30;
@@ -209,9 +204,6 @@ namespace PingPong
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
-        /*
-         * Перемещение игрока по полю. Считается что курсор всегда указывает на центр фигуры
-         */
         private void ChangeCanvas_MouseMove(object sender, MouseEventArgs e) { }
 
         /*
@@ -220,40 +212,40 @@ namespace PingPong
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             Point l = e.Location;
-            Console.WriteLine($"MouseEvent: {l}");
+            //Console.WriteLine($"MouseEvent: {l}");
             //Console.WriteLine($"Cursor: {Cursor.Position}");
-            Console.WriteLine($"Cursor(on panel): {pictureBox1.PointToClient(Cursor.Position)}\n");
+            //Console.WriteLine($"Cursor(on panel): {pictureBox1.PointToClient(Cursor.Position)}\n");
 
-            /*
+            Point pl = player.getMiddlePoint();
+
             // Если игрок пытается пересечь линию по середине
             if (l.X <= pictureBox1.Width / 2 + MIDLINEWIDTH / 2 + player.getWidth() / 2)
             {
-                Cursor.Position = player.getMiddlePoint();
+                Cursor.Position = pictureBox1.PointToScreen(pl);
+                return;
             }
 
             // Если игрок пытается уйти в правый край
             if (l.X >= pictureBox1.Width - player.getWidth() / 2)
             {
-                Cursor.Position = player.getMiddlePoint();
+                l = pl;
             }
 
             // Если игро пытается уйти слишком вверх
             if (l.Y <= 0 + player.getHeight() / 2)
             {
-                Cursor.Position = player.getMiddlePoint();
+                l = pl;
             }
 
             // Если игрок пытается уйти слишком вниз
             if (l.Y >= pictureBox1.Height - player.getHeight() / 2)
             {
-                Cursor.Position = player.getMiddlePoint();
+                l = pl;
             }
-            */
 
             // Вычисляет x и y угловые точки прямоугольника по заданной середине прямоугольника
-            player.changeMiddlePosition(l.X, l.Y);
-            
-
+            player.changeLocationByMiddlePosition(l.X, l.Y);
+          
             pictureBox1.Invalidate();
         }
     }

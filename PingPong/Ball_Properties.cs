@@ -12,10 +12,17 @@ namespace PingPong
         private int radius;
         private int coordOfCenterX;
         private int coordOfCenterY;
-        public System.Drawing.Color ColorOfBall { get; set; }
-        
-        // Количество пикселей в секунду
-       // public int Speed { get; set; }
+        private System.Drawing.Color color;
+        private SolidBrush brush;
+        public System.Drawing.Color ColorOfBall
+        {
+            get { return this.color; }
+            set 
+            {
+                this.color = value;
+                brush = new SolidBrush(value);
+            }
+        }
 
         public (int stepX, int stepY) Steps;
 

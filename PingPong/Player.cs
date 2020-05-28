@@ -61,7 +61,7 @@ namespace PingPong
         }
 
         // Вычисляет x и y угловые точки прямоугольника по заданной середине прямоугольника
-        public void changeMiddlePosition(int midX, int midY)
+        public void changeLocationByMiddlePosition(int midX, int midY)
         {
             figure.X = midX - figure.Width / 2;
             figure.Y = midY - figure.Height / 2;
