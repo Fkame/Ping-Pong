@@ -95,30 +95,17 @@ namespace PingPong
 
         private void speedUpAnimation()
         {
-            if (timer1.Interval == 1)
+            if (Math.Abs(ball.Steps.stepX) < 15 & Math.Abs(ball.Steps.stepY) < 15)
             {
-                if (Math.Abs(ball.Steps.stepX) < 15 & Math.Abs(ball.Steps.stepY) < 15)
-                {
-                    // SpeedUp Ball
-                    ball.Steps.stepX += (int)Math.Floor(ball.Steps.stepX * 0.2);
-                    ball.Steps.stepY += (int)Math.Floor(ball.Steps.stepY * 0.2);
+                // SpeedUp Ball
+                ball.Steps.stepX += (int)Math.Floor(ball.Steps.stepX * 0.1);
+                ball.Steps.stepY += (int)Math.Floor(ball.Steps.stepY * 0.1);
 
-                    // SpeedUp AI
-                    if (aiPlayer.speed < 10) aiPlayer.speed++;
-                }
-                // Увеличвение скорости ИИ до максимума при максимальной скорости мяча
-                aiPlayer.speed = 10;
-            }
-            else
-            {
-                if (timer1.Interval >= 6) timer1.Interval -= 5;
-                else timer1.Interval = 1;
-            }
+                // SpeedUp AI
+                if (aiPlayer.speed < 10) aiPlayer.speed++;
+            }        
         }
 
-        /*
-         * Запуск консоли для Debug-штук
-         */
         private void Ping_Pong_Field_Load(object sender, EventArgs e)
         {
             //AllocConsole();
@@ -226,7 +213,7 @@ namespace PingPong
             Cursor.Position = pictureBox1.PointToScreen(player.getMiddlePoint());
 
             timer2.Interval = MSECONDSTOSPEEDUP;
-            timer1.Interval = 20;
+            timer1.Interval = 1;
 
             timer1.Start();
             timer2.Start();

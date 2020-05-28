@@ -20,6 +20,7 @@ namespace PingPong
         private int coordOfCenterY;
         private System.Drawing.Color color;
         private SolidBrush brush;
+        private Pen pen;
         public System.Drawing.Color ColorOfBall
         {
             get { return this.color; }

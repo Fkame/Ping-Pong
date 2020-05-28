@@ -28,6 +28,9 @@ namespace PingPong
             this.Steps.stepX = stepX;
             this.Steps.stepY = stepY;
             this.ColorOfBall = color;
+
+            this.pen = new Pen(System.Drawing.Color.Black);
+            pen.Width = 10;
         }
 
         /*
@@ -49,6 +52,7 @@ namespace PingPong
             int y = CoordOfCenterY - Radius;
             Rectangle rect = new Rectangle(x, y, 2 * Radius, 2 * Radius);
             g.FillEllipse(this.brush, rect);
+            g.DrawEllipse(this.pen, rect);
         }
     }
 }
