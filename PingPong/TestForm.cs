@@ -15,7 +15,8 @@ namespace PingPong
 {
     public partial class TestForm : Form
     {
-        Ball ball;
+        private Ball ball;
+        private int counter = 0;
 
         public TestForm()
         {
@@ -100,6 +101,20 @@ namespace PingPong
             Console.WriteLine($"After: Ball.X = {ball.CoordOfCenterX}, " +
                $"Ball.Y = {ball.CoordOfCenterY}\n");
 
+            
+            counter += timer1.Interval;
+            if (counter >= 5000)
+            {
+                counter = 0;
+                timer1.Interval = timer1.Interval / 2;
+                if (timer1.Interval <= 10)
+                {
+                    ball.steps.stepX *= 2;
+                    ball.steps.stepY *= 2;
+               
+                }
+            }
+
             // Перерисовка
             panel1.Invalidate();
         }
@@ -110,6 +125,8 @@ namespace PingPong
         private void Form2_Load(object sender, EventArgs e)
         {
             AllocConsole();
+
+            this.DoubleBuffered = true;
 
             int radius = 20;
 
@@ -126,7 +143,7 @@ namespace PingPong
             ball.steps.stepY = steps.stepY * 2;
 
             timer1.Start();
-            timer1.Interval = 100;
+            timer1.Interval = 60;
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]
