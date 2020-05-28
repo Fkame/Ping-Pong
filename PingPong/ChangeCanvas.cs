@@ -13,32 +13,32 @@ using System.Diagnostics;
 
 namespace PingPong
 {
-    public partial class TestForm : Form
+    public partial class ChangeCanvas : Form
     {
         private Ball ball;
         private int counter = 0;
         private const int MSECONDSTOSPEEDUP = 10000;
 
-        public TestForm()
+        public ChangeCanvas()
         {
             InitializeComponent();
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
+        private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
 
             // Разделительная линия
             Pen blackPen = new Pen(System.Drawing.Color.Black);
             blackPen.Width = 6;
-            int xCenter = panel1.Width / 2;
-            g.DrawLine(blackPen, new Point(xCenter, 0), new Point(xCenter, panel1.Height));
+            int xCenter = pictureBox1.Width / 2;
+            g.DrawLine(blackPen, new Point(xCenter, 0), new Point(xCenter, pictureBox1.Height));
 
             // Края карты
             Pen endPen = new Pen(System.Drawing.Color.IndianRed);
             endPen.Width = 4;
-            g.DrawLine(endPen, new Point(0, 0), new Point(0, panel1.Height));
-            g.DrawLine(endPen, new Point(panel1.Width, 0), new Point(panel1.Width, panel1.Height));
+            g.DrawLine(endPen, new Point(0, 0), new Point(0, pictureBox1.Height));
+            g.DrawLine(endPen, new Point(pictureBox1.Width, 0), new Point(pictureBox1.Width, pictureBox1.Height));
 
             // Отрисовка мяча
             int x = ball.CoordOfCenterX - ball.Radius;
@@ -71,34 +71,34 @@ namespace PingPong
                 ball.CoordOfCenterY = 0 + ball.Radius;
                 ball.Steps.stepX = -ball.Steps.stepX;
                 ball.Steps.stepY = -ball.Steps.stepY;
-                panel1.Invalidate();
+                pictureBox1.Invalidate();
                 return;
             }
-            if (newLeftBorderX <= 0 & newBottomBorderY >= panel1.Width)
+            if (newLeftBorderX <= 0 & newBottomBorderY >= pictureBox1.Width)
             {
                 ball.CoordOfCenterX = 0 + ball.Radius;
-                ball.CoordOfCenterY = panel1.Height - ball.Radius;
+                ball.CoordOfCenterY = pictureBox1.Height - ball.Radius;
                 ball.Steps.stepX = -ball.Steps.stepX;
                 ball.Steps.stepY = -ball.Steps.stepY;
-                panel1.Invalidate();
+                pictureBox1.Invalidate();
                 return;
             }
-            if (newRightBorderX >= panel1.Width & newTopBorderY <= 0)
+            if (newRightBorderX >= pictureBox1.Width & newTopBorderY <= 0)
             {
-                ball.CoordOfCenterX = panel1.Width - ball.Radius;
+                ball.CoordOfCenterX = pictureBox1.Width - ball.Radius;
                 ball.CoordOfCenterY = 0 + ball.Radius;
                 ball.Steps.stepX = -ball.Steps.stepX;
                 ball.Steps.stepY = -ball.Steps.stepY;
-                panel1.Invalidate();
+                pictureBox1.Invalidate();
                 return;
             }
-            if (newRightBorderX >= panel1.Width & newBottomBorderY >= panel1.Height)
+            if (newRightBorderX >= pictureBox1.Width & newBottomBorderY >= pictureBox1.Height)
             {
-                ball.CoordOfCenterX = panel1.Width - ball.Radius;
-                ball.CoordOfCenterY = panel1.Height - ball.Radius;
+                ball.CoordOfCenterX = pictureBox1.Width - ball.Radius;
+                ball.CoordOfCenterY = pictureBox1.Height - ball.Radius;
                 ball.Steps.stepX = -ball.Steps.stepX;
                 ball.Steps.stepY = -ball.Steps.stepY;
-                panel1.Invalidate();
+                pictureBox1.Invalidate();
                 return;
             }
 
@@ -108,15 +108,15 @@ namespace PingPong
                 ball.CoordOfCenterX = 0 + ball.Radius;
                 ball.CoordOfCenterY = newY;
                 ball.Steps.stepX = -ball.Steps.stepX;
-                panel1.Invalidate();
+                pictureBox1.Invalidate();
                 return;
             }
-            if (newRightBorderX >= panel1.Width)
+            if (newRightBorderX >= pictureBox1.Width)
             {
-                ball.CoordOfCenterX = panel1.Width - ball.Radius;
+                ball.CoordOfCenterX = pictureBox1.Width - ball.Radius;
                 ball.CoordOfCenterY = newY;
                 ball.Steps.stepX = -ball.Steps.stepX;
-                panel1.Invalidate();
+                pictureBox1.Invalidate();
                 return;
             }
 
@@ -126,24 +126,24 @@ namespace PingPong
                 ball.CoordOfCenterX = newX;
                 ball.CoordOfCenterY = 0 + ball.Radius;
                 ball.Steps.stepY = -ball.Steps.stepY;
-                panel1.Invalidate();
+                pictureBox1.Invalidate();
                 return;
             }
-            if (newBottomBorderY >= panel1.Height)
+            if (newBottomBorderY >= pictureBox1.Height)
             {
                 ball.CoordOfCenterX = newX;
-                ball.CoordOfCenterY = panel1.Height - ball.Radius;
+                ball.CoordOfCenterY = pictureBox1.Height - ball.Radius;
                 ball.Steps.stepY = -ball.Steps.stepY;
-                panel1.Invalidate();
+                pictureBox1.Invalidate();
                 return;
             }
 
             ball.CoordOfCenterX = newX;
             ball.CoordOfCenterY = newY;
-            
+
             Console.WriteLine($"After: Ball.X = {ball.CoordOfCenterX}, " +
                $"Ball.Y = {ball.CoordOfCenterY}\n");
-    
+
             // Увеличение скорости мяча
             counter += timer1.Interval;
             if (counter >= MSECONDSTOSPEEDUP)
@@ -153,7 +153,7 @@ namespace PingPong
             }
 
             // Перерисовка
-            panel1.Invalidate();
+            pictureBox1.Invalidate();
         }
 
         private void speedUpAnimation()
@@ -169,14 +169,14 @@ namespace PingPong
         /*
          * Запуск консоли для Debug-штук
          */
-        private void Form2_Load(object sender, EventArgs e)
+        private void ChangeCanvas_Load(object sender, EventArgs e)
         {
             AllocConsole();
 
-            this.DoubleBuffered = true;
+            //this.DoubleBuffered = true;
 
-            ball = BallHelper.generateRandomBallInMiddle(panel1.Width / 2, panel1.Width / 2, 
-                0, panel1.Height);
+            ball = BallHelper.generateRandomBallInMiddle(pictureBox1.Width / 2, pictureBox1.Width / 2, 
+                0, pictureBox1.Height);
 
             timer1.Start();
             timer1.Interval = 60;
@@ -185,5 +185,6 @@ namespace PingPong
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
+
     }
 }

@@ -49,6 +49,12 @@
     <Compile Include="BallHelper.cs" />
     <Compile Include="Ball_Methods_and_Constructors.cs" />
     <Compile Include="Ball_Properties.cs" />
+    <Compile Include="ChangeCanvas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChangeCanvas.Designer.cs">
+      <DependentUpon>ChangeCanvas.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,6 +69,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ChangeCanvas.resx">
+      <DependentUpon>ChangeCanvas.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

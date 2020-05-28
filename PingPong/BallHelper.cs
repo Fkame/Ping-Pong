@@ -55,13 +55,13 @@ namespace PingPong
             return b;
         }        
 
-        public static Ball generateRandomBallInMiddle(Panel panel1)
+        public static Ball generateRandomBallInMiddle(int leftLimit, int rightLimit, int topLimit, int bottomLimit)
         {
             int radius = 20;
 
             // Координаты вдоль линии по середине поля
-            var coords = BallHelper.generateRandomPosition(panel1.Width / 2, panel1.Width / 2,
-                radius, panel1.Height - radius);
+            var coords = BallHelper.generateRandomPosition(leftLimit, rightLimit,
+                topLimit + radius, bottomLimit - radius);
 
             // Сдвиг мяча по ОХ и ОУ
             var steps = BallHelper.generateRandomSteps();
