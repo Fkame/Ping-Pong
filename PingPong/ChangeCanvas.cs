@@ -58,125 +58,12 @@ namespace PingPong
             int newX = ball.CoordOfCenterX + ball.Steps.stepX;
             int newY = ball.CoordOfCenterY + ball.Steps.stepY;
 
-            int newLeftBorderX = newX - ball.Radius;
-            int newRightBorderX = newX + ball.Radius;
-            int newTopBorderY = newY - ball.Radius;
-            int newBottomBorderY = newY + ball.Radius;
-
-            // Если шар пытается преодолеть 2 границы сразу
-           
-            if (newLeftBorderX <= 0 & newTopBorderY <= 0)
-            {
-                ball.CoordOfCenterX = 0 + ball.Radius;
-                ball.CoordOfCenterY = 0 + ball.Radius;
-                ball.Steps.stepX = -ball.Steps.stepX;
-                ball.Steps.stepY = -ball.Steps.stepY;
-                pictureBox1.Invalidate();
-                return;
-            }
-            if (newLeftBorderX <= 0 & newBottomBorderY >= pictureBox1.Width)
-            {
-                ball.CoordOfCenterX = 0 + ball.Radius;
-                ball.CoordOfCenterY = pictureBox1.Height - ball.Radius;
-                ball.Steps.stepX = -ball.Steps.stepX;
-                ball.Steps.stepY = -ball.Steps.stepY;
-                pictureBox1.Invalidate();
-                return;
-            }
-            if (newRightBorderX >= pictureBox1.Width & newTopBorderY <= 0)
-            {
-                ball.CoordOfCenterX = pictureBox1.Width - ball.Radius;
-                ball.CoordOfCenterY = 0 + ball.Radius;
-                ball.Steps.stepX = -ball.Steps.stepX;
-                ball.Steps.stepY = -ball.Steps.stepY;
-                pictureBox1.Invalidate();
-                return;
-            }
-            if (newRightBorderX >= pictureBox1.Width & newBottomBorderY >= pictureBox1.Height)
-            {
-                ball.CoordOfCenterX = pictureBox1.Width - ball.Radius;
-                ball.CoordOfCenterY = pictureBox1.Height - ball.Radius;
-                ball.Steps.stepX = -ball.Steps.stepX;
-                ball.Steps.stepY = -ball.Steps.stepY;
-                pictureBox1.Invalidate();
-                return;
-            }
-            
-            // Если шар пытается пересечь левую или правую границы
-            if (newLeftBorderX <= 0)
-            {
-                ball.CoordOfCenterX = 0 + ball.Radius;
-                ball.CoordOfCenterY = newY;
-                ball.Steps.stepX = -ball.Steps.stepX;
-                pictureBox1.Invalidate();
-                return;
-            }
-            if (newRightBorderX >= pictureBox1.Width)
-            {
-                ball.CoordOfCenterX = pictureBox1.Width - ball.Radius;
-                ball.CoordOfCenterY = newY;
-                ball.Steps.stepX = -ball.Steps.stepX;
-                pictureBox1.Invalidate();
-                return;
-            }
-
-            // Если шар пытается преодолеть верхюю или нижнюю границы
-            if (newTopBorderY <= 0)
+            if (!BallHelper.makeARebountFromPlayerIfNeed(ball, player) &
+                !BallHelper.makeARebountFromWalls(ball, pictureBox1))
             {
                 ball.CoordOfCenterX = newX;
-                ball.CoordOfCenterY = 0 + ball.Radius;
-                ball.Steps.stepY = -ball.Steps.stepY;
-                pictureBox1.Invalidate();
-                return;
-            }
-            if (newBottomBorderY >= pictureBox1.Height)
-            {
-                ball.CoordOfCenterX = newX;
-                ball.CoordOfCenterY = pictureBox1.Height - ball.Radius;
-                ball.Steps.stepY = -ball.Steps.stepY;
-                pictureBox1.Invalidate();
-                return;
-            }
-
-            // Если шар споткнулся об игрока слева (не ИИ)
-            if (player.isIncludeThisPoint(newRightBorderX, newY))
-            {
-                ball.CoordOfCenterX = player.getLocation().X - ball.Radius;
                 ball.CoordOfCenterY = newY;
-                ball.Steps.stepX = -ball.Steps.stepX;
-                pictureBox1.Invalidate();
-                return;
             }
-            // Если шар споткнулся об игрока справа (не ИИ)
-            if (player.isIncludeThisPoint(newLeftBorderX, newY))
-            {
-                ball.CoordOfCenterX = player.getLocation().X + ball.Radius + player.getWidth();
-                ball.CoordOfCenterY = newY;
-                ball.Steps.stepX = -ball.Steps.stepX;
-                pictureBox1.Invalidate();
-                return;
-            }
-            // Если ударлися об игрока верхней частью (не ИИ)
-            if (player.isIncludeThisPoint(newX, newTopBorderY))
-            {
-                ball.CoordOfCenterX = newX;
-                ball.CoordOfCenterY = player.getLocation().Y + player.getHeight() + ball.Radius;
-                ball.Steps.stepY = -ball.Steps.stepY;
-                pictureBox1.Invalidate();
-                return;
-            }
-            // Если ударлися об игрока нижней частью (не ИИ)
-            if (player.isIncludeThisPoint(newX, newBottomBorderY))
-            {
-                ball.CoordOfCenterX = newX;
-                ball.CoordOfCenterY = player.getLocation().Y - ball.Radius;
-                ball.Steps.stepY = -ball.Steps.stepY;
-                pictureBox1.Invalidate();
-                return;
-            }
-
-            ball.CoordOfCenterX = newX;
-            ball.CoordOfCenterY = newY;
 
             // Увеличение скорости мяча
             counter += timer1.Interval;
@@ -194,10 +81,10 @@ namespace PingPong
         {
             if (timer1.Interval == 1)
             {
-                if (ball.Steps.stepX < 20 & ball.Steps.stepY < 20)
+                if (ball.Steps.stepX < 10 & ball.Steps.stepY < 10)
                 {
-                    ball.Steps.stepX += 5;
-                    ball.Steps.stepY += 5;
+                    ball.Steps.stepX += 1;
+                    ball.Steps.stepY += 1;
                 }
             }
             else
