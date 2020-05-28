@@ -50,6 +50,9 @@
     <Compile Include="BallHelper.cs" />
     <Compile Include="Ball_Methods_and_Constructors.cs" />
     <Compile Include="Ball_Properties.cs" />
+    <Compile Include="Ping-Pong-Field-AdditionMethods.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Ping-Pong-Field.cs">
       <SubType>Form</SubType>
     </Compile>

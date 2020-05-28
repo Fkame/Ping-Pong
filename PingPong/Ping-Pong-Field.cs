@@ -12,6 +12,9 @@ using System.Runtime.InteropServices;
 
 namespace PingPong
 {
+    /// <summary>
+    /// Одна из частей основной формы. Содержит в себе события, конструкторы и состояния
+    /// </summary>
     public partial class Ping_Pong_Field : Form
     {
         private Ball ball;
@@ -30,6 +33,12 @@ namespace PingPong
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Событие перерисовки компонента. Косвенно вызывается через element.Invalidate().
+        /// Отрисовывает поле, мяч, игроков согласно их состояниям.
+        /// </summary>
+        /// <param name="sender">Ссылка на объект, вызвавший событие</param>
+        /// <param name="e">Объект, специфичный для обрабатываемого события</param>
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -54,9 +63,13 @@ namespace PingPong
             aiPlayer.drawYourSelf(g);
         }
 
-        /*
-         * Отвечает за движения мяча и ИИ-игрока
-         */
+        /// <summary>
+        /// Обработка срабатывания таймера. Управляет перемещением мяча по полю. 
+        /// Реализует анимацию мяча, так как после изменений запрашивает перерисовку компонента для отображения.
+        /// Так как вызывается часто его срабатывание зацикленно, позволяет легко управлять скоростью анимации мяча.
+        /// </summary>
+        /// <param name="sender">Ссылка на объект, вызвавший событие</param>
+        /// <param name="e">Объект, специфичный для обрабатываемого события</param>
         private void timer1_Tick(object sender, EventArgs e)
         {
             // Следующие координаты центра мяча
@@ -93,19 +106,6 @@ namespace PingPong
             pictureBox1.Invalidate();
         }
 
-        private void speedUpAnimation()
-        {
-            if (Math.Abs(ball.Steps.stepX) < 15 & Math.Abs(ball.Steps.stepY) < 15)
-            {
-                // SpeedUp Ball
-                ball.Steps.stepX += (int)Math.Floor(ball.Steps.stepX * 0.1);
-                ball.Steps.stepY += (int)Math.Floor(ball.Steps.stepY * 0.1);
-
-                // SpeedUp AI
-                if (aiPlayer.speed < 10) aiPlayer.speed++;
-            }        
-        }
-
         private void Ping_Pong_Field_Load(object sender, EventArgs e)
         {
             //AllocConsole();
@@ -126,6 +126,14 @@ namespace PingPong
          * Примечание: первое же движение происходит при первоначальной настройке положения курсора
          * Отвечает за движение планки игрока за курсором
          */
+        /// <summary>
+        /// Метод, вызываемый при передвижении курсора по полю. Данный метод контролирует движения игрока,
+        /// фиксирует их в объекте, и при необходимости ограничивает - например, 
+        /// не допускает пересечение центральной линии игроком.
+        /// Также реализует анимацию, так как после получения изменений - запрашивает перерисовку поля.
+        /// </summary>
+        /// <param name = "sender" > Ссылка на объект, вызвавший событие</param>
+        /// <param name="e">Объект, специфичный для обрабатываемого события</param>
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             Point l = e.Location;
@@ -152,17 +160,24 @@ namespace PingPong
             pictureBox1.Invalidate();
         }
 
-        /*
-         * Отвечает за увеличение скорости анимации
-         */
+        /// <summary>
+        /// При каждом срабатывании таймера увеличивается скорость мяча (увеличивается шаг) через вызов метода.
+        /// </summary>
+        /// <param name = "sender" > Ссылка на объект, вызвавший событие</param>
+        /// <param name="e">Объект, специфичный для обрабатываемого события</param>
         private void timer2_Tick(object sender, EventArgs e)
         {
             speedUpAnimation();
         }
 
-        /*
-         * Отвечает за ход ИИ
-         */
+        /// <summary>
+        /// Таймер - время на раздумия ИИ. Подобие задержки на принятие решения. 
+        /// Данный метод - некоторые действие после "задержки на раздумия" в виде таймера.
+        /// В нём вызывается метод, реализующий движение планки ИИ в сторону мяча на некоторую величину - скорость.
+        /// Также реализует анимацию, так как запрашивает перерисовку поля после передвижения планки ИИ.
+        /// </summary>
+        /// <param name = "sender" > Ссылка на объект, вызвавший событие</param>
+        /// <param name="e">Объект, специфичный для обрабатываемого события</param>
         private void timer3_Tick(object sender, EventArgs e)
         {
             // Ход ИИ
@@ -170,56 +185,6 @@ namespace PingPong
 
             // Перерисовка
             pictureBox1.Invalidate();
-        }
-
-        /*
-         * Срабатывает при забитии гола
-         */
-        private void scoreUp(bool isPlayer)
-        {
-            initializeElementsOnStart();
-
-            if (isPlayer) scorePanel.Player1++;
-            else scorePanel.PlayerAI++;
-
-            label1.Text = scorePanel.ToString();
-        }
-
-        /*
-         * Расположение в начальном положении (на старте и при забитии гола) 
-         */
-        private void initializeElementsOnStart()
-        {
-            ball = BallHelper.generateRandomBall(pictureBox1.Width / 2, pictureBox1.Width / 2,
-                0, pictureBox1.Height);
-
-            int width = 20;
-            int height = 100;
-
-            // Создание игрока
-            int xCoord = pictureBox1.Width - 2 * width;
-            int yCoord = pictureBox1.Height / 2 - height / 2;
-            player = new Player(xCoord, yCoord, width, height);
-
-            // Создание ИИ игрока
-            xCoord = 0 + width;
-            yCoord = pictureBox1.Height / 2 - height / 2;
-            aiPlayer = new AIPlayer(xCoord, yCoord, width, height);
-
-            /*
-             * pictureBox1.PointToClient(Cursor.Position) - проецирует расположение курсора на экране в разположение на элементе
-             * pictureBox1.PointToScreen(Cursor.Position) - обратное от предыдущего преобразование
-             */
-            Cursor.Position = pictureBox1.PointToScreen(player.getMiddlePoint());
-
-            timer2.Interval = MSECONDSTOSPEEDUP;
-            timer1.Interval = 1;
-
-            timer1.Start();
-            timer2.Start();
-
-            timer3.Interval = 20;
-            timer3.Start();
-        }
+        }     
     }
 }
