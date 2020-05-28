@@ -17,8 +17,10 @@ namespace PingPong
     {
         private Ball ball;
         private Player player;
+
+        // Контроль ускорения мячика в процессе игры
         private int counter = 0;
-        private const int MSECONDSTOSPEEDUP = 3000;
+        private const int MSECONDSTOSPEEDUP = 500;
 
         private const int MIDLINEWIDTH = 6;
         //private Rectangle MidLine = new Rectangle();
@@ -62,6 +64,7 @@ namespace PingPong
             int newBottomBorderY = newY + ball.Radius;
 
             // Если шар пытается преодолеть 2 границы сразу
+           
             if (newLeftBorderX <= 0 & newTopBorderY <= 0)
             {
                 ball.CoordOfCenterX = 0 + ball.Radius;
@@ -98,7 +101,7 @@ namespace PingPong
                 pictureBox1.Invalidate();
                 return;
             }
-
+            
             // Если шар пытается пересечь левую или правую границы
             if (newLeftBorderX <= 0)
             {
@@ -130,6 +133,43 @@ namespace PingPong
             {
                 ball.CoordOfCenterX = newX;
                 ball.CoordOfCenterY = pictureBox1.Height - ball.Radius;
+                ball.Steps.stepY = -ball.Steps.stepY;
+                pictureBox1.Invalidate();
+                return;
+            }
+
+            // Если шар споткнулся об игрока слева (не ИИ)
+            if (player.isIncludeThisPoint(newRightBorderX, newY))
+            {
+                ball.CoordOfCenterX = player.getLocation().X - ball.Radius;
+                ball.CoordOfCenterY = newY;
+                ball.Steps.stepX = -ball.Steps.stepX;
+                pictureBox1.Invalidate();
+                return;
+            }
+            // Если шар споткнулся об игрока справа (не ИИ)
+            if (player.isIncludeThisPoint(newLeftBorderX, newY))
+            {
+                ball.CoordOfCenterX = player.getLocation().X + ball.Radius + player.getWidth();
+                ball.CoordOfCenterY = newY;
+                ball.Steps.stepX = -ball.Steps.stepX;
+                pictureBox1.Invalidate();
+                return;
+            }
+            // Если ударлися об игрока верхней частью (не ИИ)
+            if (player.isIncludeThisPoint(newX, newTopBorderY))
+            {
+                ball.CoordOfCenterX = newX;
+                ball.CoordOfCenterY = player.getLocation().Y + player.getHeight() + ball.Radius;
+                ball.Steps.stepY = -ball.Steps.stepY;
+                pictureBox1.Invalidate();
+                return;
+            }
+            // Если ударлися об игрока нижней частью (не ИИ)
+            if (player.isIncludeThisPoint(newX, newBottomBorderY))
+            {
+                ball.CoordOfCenterX = newX;
+                ball.CoordOfCenterY = player.getLocation().Y - ball.Radius;
                 ball.Steps.stepY = -ball.Steps.stepY;
                 pictureBox1.Invalidate();
                 return;
@@ -185,16 +225,11 @@ namespace PingPong
             int yCoord = pictureBox1.Height / 2 - height / 2;
             player = new Player(xCoord, yCoord, width, height);
 
-            Point mid = player.getMiddlePoint();
-            //Console.WriteLine($"init mid point {mid}");
-            //Console.WriteLine($"init player point {player.getLocation()}");
-
             /*
              * pictureBox1.PointToClient(Cursor.Position) - проецирует расположение курсора на экране в разположение на элементе
              * pictureBox1.PointToScreen(Cursor.Position) - обратное от предыдущего преобразование
              */
-            Cursor.Position = pictureBox1.PointToScreen(mid);
-            //Console.WriteLine($"init curse points {pictureBox1.PointToClient(Cursor.Position)}");
+            Cursor.Position = pictureBox1.PointToScreen(player.getMiddlePoint());
 
             timer1.Start();
             timer1.Interval = 30;
@@ -204,18 +239,12 @@ namespace PingPong
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
-        private void ChangeCanvas_MouseMove(object sender, MouseEventArgs e) { }
-
         /*
          * Примечание: первое же движение происходит при первоначальной настройке положения курсора
          */
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             Point l = e.Location;
-            //Console.WriteLine($"MouseEvent: {l}");
-            //Console.WriteLine($"Cursor: {Cursor.Position}");
-            //Console.WriteLine($"Cursor(on panel): {pictureBox1.PointToClient(Cursor.Position)}\n");
-
             Point pl = player.getMiddlePoint();
 
             // Если игрок пытается пересечь линию по середине
@@ -226,26 +255,16 @@ namespace PingPong
             }
 
             // Если игрок пытается уйти в правый край
-            if (l.X >= pictureBox1.Width - player.getWidth() / 2)
-            {
-                l = pl;
-            }
+            if (l.X >= pictureBox1.Width - player.getWidth() / 2) { l = pl; }
 
             // Если игро пытается уйти слишком вверх
-            if (l.Y <= 0 + player.getHeight() / 2)
-            {
-                l = pl;
-            }
+            if (l.Y <= 0 + player.getHeight() / 2) { l = pl; }
 
             // Если игрок пытается уйти слишком вниз
-            if (l.Y >= pictureBox1.Height - player.getHeight() / 2)
-            {
-                l = pl;
-            }
+            if (l.Y >= pictureBox1.Height - player.getHeight() / 2) { l = pl; }
 
             // Вычисляет x и y угловые точки прямоугольника по заданной середине прямоугольника
-            player.changeLocationByMiddlePosition(l.X, l.Y);
-          
+            player.changeLocationByMiddlePosition(l.X, l.Y);        
             pictureBox1.Invalidate();
         }
     }

@@ -69,7 +69,6 @@
             this.Name = "ChangeCanvas";
             this.Text = "Ping-Pong";
             this.Load += new System.EventHandler(this.ChangeCanvas_Load);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ChangeCanvas_MouseMove);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
