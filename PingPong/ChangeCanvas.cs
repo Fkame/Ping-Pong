@@ -73,9 +73,6 @@ namespace PingPong
                 }
             }
 
-            // Ход ИИ
-            aiPlayer.makeAIMove(ball);
-
             // Перерисовка
             pictureBox1.Invalidate();
         }
@@ -84,11 +81,17 @@ namespace PingPong
         {
             if (timer1.Interval == 1)
             {
-                if (Math.Abs(ball.Steps.stepX) < 20 & Math.Abs(ball.Steps.stepY) < 20)
+                if (Math.Abs(ball.Steps.stepX) < 15 & Math.Abs(ball.Steps.stepY) < 15)
                 {
+                    // SpeedUp Ball
                     ball.Steps.stepX += (int)Math.Floor(ball.Steps.stepX * 0.2);          
-                    ball.Steps.stepY += (int)Math.Floor(ball.Steps.stepY * 0.2);    
+                    ball.Steps.stepY += (int)Math.Floor(ball.Steps.stepY * 0.2);
+
+                    // SpeedUp AI
+                    if (aiPlayer.speed < 10) aiPlayer.speed++;
                 }
+                // Увеличвение скорости ИИ до максимума при максимальной скорости мяча
+                aiPlayer.speed = 10;
             }
             else
             {
@@ -132,8 +135,12 @@ namespace PingPong
 
             timer2.Interval = MSECONDSTOSPEEDUP;
             timer1.Interval = 20;
+
             timer1.Start();
             timer2.Start();
+
+            timer3.Interval = 1;
+            timer3.Start();
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]
@@ -142,6 +149,7 @@ namespace PingPong
 
         /*
          * Примечание: первое же движение происходит при первоначальной настройке положения курсора
+         * Отвечает за движение планки игрока за курсором
          */
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
@@ -175,8 +183,18 @@ namespace PingPong
         private void timer2_Tick(object sender, EventArgs e)
         {
             speedUpAnimation();
-            Console.WriteLine("TimeUp! StepX = {0}, StepY = {1}", ball.Steps.stepX, ball.Steps.stepY);
-            aiPlayer.upgradeAISpeed();
+        }
+
+        /*
+         * Отвечает за ход ИИ
+         */
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+            // Ход ИИ
+            aiPlayer.makeAIMove(ball);
+
+            // Перерисовка
+            pictureBox1.Invalidate();
         }
     }
 }

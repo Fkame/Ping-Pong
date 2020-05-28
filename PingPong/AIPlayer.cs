@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.Drawing;
+using System.Threading;
 
 namespace PingPong
 {
     class AIPlayer : Player
     {
-        private int speed = 5;
+        public int speed = 2;
         public AIPlayer(int xCoord, int yCoord, int width, int height) : base(xCoord, yCoord, width, height)
         { }
 
@@ -20,13 +21,10 @@ namespace PingPong
         public void makeAIMove(Ball ball)
         {
             int yMidBall = ball.CoordOfCenterY;
+            int yMidStick = figure.Y - figure.Height / 2;
 
             if (figure.Contains(figure.X, yMidBall)) return;
 
-            /*
-             * Для немного большей интеллектуальности добавим возможность сдвига не в ту сторону или пропуска хода
-             */
-            Random r = new Random();
             if (yMidBall < figure.Bottom)
             {
                 this.figure.Y -= speed;     
@@ -35,14 +33,6 @@ namespace PingPong
             {
                 this.figure.Y += speed;
             }
-        }
-
-        /*
-         * Увеличение скорости передвижения ИИ
-         */
-        public void upgradeAISpeed()
-        {
-            if (speed < figure.Height / 3) speed += 2;
         }
     }
 }
