@@ -17,7 +17,7 @@ namespace PingPong
     {
         private Ball ball;
         private int counter = 0;
-        private const int MSECONDSTOSPEEDUP = 10000;
+        private const int MSECONDSTOSPEEDUP = 3000;
 
         public ChangeCanvas()
         {
@@ -51,9 +51,11 @@ namespace PingPong
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            /*
             Console.Write(System.DateTime.Now);
             Console.WriteLine($"\nBefore: Ball.X = {ball.CoordOfCenterX}, " +
                 $"Ball.Y = {ball.CoordOfCenterY}\n");
+            */
 
             int newX = ball.CoordOfCenterX + ball.Steps.stepX;
             int newY = ball.CoordOfCenterY + ball.Steps.stepY;
@@ -141,8 +143,10 @@ namespace PingPong
             ball.CoordOfCenterX = newX;
             ball.CoordOfCenterY = newY;
 
+            /*
             Console.WriteLine($"After: Ball.X = {ball.CoordOfCenterX}, " +
                $"Ball.Y = {ball.CoordOfCenterY}\n");
+            */
 
             // Увеличение скорости мяча
             counter += timer1.Interval;
@@ -158,12 +162,29 @@ namespace PingPong
 
         private void speedUpAnimation()
         {
+            /*
             if (timer1.Interval != 1) timer1.Interval = timer1.Interval / 2;
-            if (timer1.Interval <= 10 & ball.Steps.stepX < 50 & ball.Steps.stepY < 50)
+            if (timer1.Interval <= 1 & ball.Steps.stepX < 50 & ball.Steps.stepY < 50)
             {
                 ball.Steps.stepX *= 2;
                 ball.Steps.stepY *= 2;
             }
+            */
+            //Console.WriteLine("speed = " + timer1.Interval);
+            if (timer1.Interval == 1)
+            {
+                if (ball.Steps.stepX < 50 & ball.Steps.stepY < 50)
+                {
+                    ball.Steps.stepX += 5;
+                    ball.Steps.stepY += 5;
+                }
+            }
+            else
+            {
+                if (timer1.Interval >= 6) timer1.Interval -= 5;
+                else timer1.Interval = 1;
+            }
+
         }
 
         /*
@@ -173,13 +194,11 @@ namespace PingPong
         {
             AllocConsole();
 
-            //this.DoubleBuffered = true;
-
             ball = BallHelper.generateRandomBallInMiddle(pictureBox1.Width / 2, pictureBox1.Width / 2, 
                 0, pictureBox1.Height);
 
             timer1.Start();
-            timer1.Interval = 60;
+            timer1.Interval = 30;
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]

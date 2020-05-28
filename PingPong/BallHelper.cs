@@ -30,21 +30,23 @@ namespace PingPong
          */
         public static (int stepX, int stepY) generateRandomSteps()
         {
-            int stepX = new Random().Next(-10, 10);
+            Random r = new Random();
+            int stepX = r.Next(-10, 10);
             stepX = (stepX == 0) ? 1 : stepX;
-            int stepY = new Random().Next(-10, 10);
+            int stepY = r.Next(-10, 10);
             stepY = (stepY == 0) ? 3 : stepY;
+
             int nod = NOD(stepX, stepY);
-            if (nod != stepX || nod != stepY)
-            {
-                stepX = stepX / nod;
-                stepY = stepY / nod;
-            }
+            stepX = stepX / nod;
+            stepY = stepY / nod;
+
             return (stepX, stepY);
         }
 
         private static int NOD(int a, int b)
         {
+            a = Math.Abs(a);
+            b = Math.Abs(b);
             while (a != b)
             {
                 if (a >b)
@@ -67,8 +69,10 @@ namespace PingPong
             var steps = BallHelper.generateRandomSteps();
 
             Ball ball = new Ball(radius, coords.x, coords.y, 
-                steps.stepX * 2, steps.stepY * 2, 
+                steps.stepX, steps.stepY, 
                 BallHelper.getRandomColor());
+
+            Console.WriteLine($"stepX = {steps.stepX}, stepY = {steps.stepY}");
 
             return ball;
         }
