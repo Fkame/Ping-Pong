@@ -88,7 +88,7 @@ namespace PingPong
                     ball.CoordOfCenterY = newY;
                 }
             }
-
+        
             // Перерисовка
             pictureBox1.Invalidate();
         }
