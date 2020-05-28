@@ -1,6 +1,6 @@
 ﻿namespace PingPong
 {
-    partial class ChangeCanvas
+    partial class Ping_Pong_Field
     {
         /// <summary>
         /// Required designer variable.
@@ -78,7 +78,7 @@
             this.Controls.Add(this.pictureBox1);
             this.Name = "ChangeCanvas";
             this.Text = "Ping-Pong";
-            this.Load += new System.EventHandler(this.ChangeCanvas_Load);
+            this.Load += new System.EventHandler(this.Ping_Pong_Field_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 

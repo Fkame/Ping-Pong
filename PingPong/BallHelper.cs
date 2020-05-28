@@ -30,7 +30,6 @@ namespace PingPong
          */
         public static (int stepX, int stepY) generateRandomSteps()
         {
-            Console.WriteLine("Generating steps...");
             Random r = new Random();
             int stepX = 0;
             int stepY = 0;
@@ -56,7 +55,6 @@ namespace PingPong
                 stepY = stepY / nod;
             }
 
-            Console.WriteLine(stepX + ", " + stepY);
             return (stepX, stepY);
         }
 
@@ -88,8 +86,6 @@ namespace PingPong
             Ball ball = new Ball(radius, coords.x, coords.y, 
                 steps.stepX, steps.stepY, 
                 BallHelper.getRandomColor());
-
-            Console.WriteLine($"stepX = {steps.stepX}, stepY = {steps.stepY}");
 
             return ball;
         }

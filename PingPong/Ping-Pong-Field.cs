@@ -9,11 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using System.Runtime.InteropServices;
-using System.Diagnostics;
 
 namespace PingPong
 {
-    public partial class ChangeCanvas : Form
+    public partial class Ping_Pong_Field : Form
     {
         private Ball ball;
         private Player player;
@@ -21,12 +20,12 @@ namespace PingPong
         private ScorePanel scorePanel;
 
         // Контроль ускорения мячика в процессе игры
-        private const int MSECONDSTOSPEEDUP = 1000;
+        private const int MSECONDSTOSPEEDUP = 3000;
 
         // Ширина средней линии
         private const int MIDLINEWIDTH = 6;
 
-        public ChangeCanvas()
+        public Ping_Pong_Field()
         {
             InitializeComponent();
         }
@@ -101,7 +100,7 @@ namespace PingPong
                 if (Math.Abs(ball.Steps.stepX) < 15 & Math.Abs(ball.Steps.stepY) < 15)
                 {
                     // SpeedUp Ball
-                    ball.Steps.stepX += (int)Math.Floor(ball.Steps.stepX * 0.2);          
+                    ball.Steps.stepX += (int)Math.Floor(ball.Steps.stepX * 0.2);
                     ball.Steps.stepY += (int)Math.Floor(ball.Steps.stepY * 0.2);
 
                     // SpeedUp AI
@@ -120,19 +119,21 @@ namespace PingPong
         /*
          * Запуск консоли для Debug-штук
          */
-        private void ChangeCanvas_Load(object sender, EventArgs e)
+        private void Ping_Pong_Field_Load(object sender, EventArgs e)
         {
-            AllocConsole();
+            //AllocConsole();
 
             scorePanel = new ScorePanel();
-            //Cursor.Hide();
+            Cursor.Hide();
 
             this.initializeElementsOnStart();
         }
 
+        /*
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
+        */
 
         /*
          * Примечание: первое же движение происходит при первоначальной настройке положения курсора
@@ -160,7 +161,7 @@ namespace PingPong
             if (l.Y >= pictureBox1.Height - player.getHeight() / 2) { l = pl; }
 
             // Вычисляет x и y угловые точки прямоугольника по заданной середине прямоугольника
-            player.changeLocationByMiddlePosition(l.X, l.Y);        
+            player.changeLocationByMiddlePosition(l.X, l.Y);
             pictureBox1.Invalidate();
         }
 
@@ -188,7 +189,7 @@ namespace PingPong
          * Срабатывает при забитии гола
          */
         private void scoreUp(bool isPlayer)
-        { 
+        {
             initializeElementsOnStart();
 
             if (isPlayer) scorePanel.Player1++;

@@ -16,7 +16,7 @@ namespace PingPong
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ChangeCanvas());
+            Application.Run(new Ping_Pong_Field());
         }
     }
 }
