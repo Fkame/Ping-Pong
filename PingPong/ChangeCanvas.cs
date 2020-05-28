@@ -16,8 +16,12 @@ namespace PingPong
     public partial class ChangeCanvas : Form
     {
         private Ball ball;
+        private Player player;
         private int counter = 0;
         private const int MSECONDSTOSPEEDUP = 3000;
+
+        private const int MIDLINEWIDTH = 6;
+        //private Rectangle MidLine = new Rectangle();
 
         public ChangeCanvas()
         {
@@ -30,8 +34,8 @@ namespace PingPong
 
             // Разделительная линия
             Pen blackPen = new Pen(System.Drawing.Color.Black);
-            blackPen.Width = 6;
-            int xCenter = pictureBox1.Width / 2;
+            blackPen.Width = MIDLINEWIDTH;
+            int xCenter = pictureBox1.Width / 2 - MIDLINEWIDTH / 2;
             g.DrawLine(blackPen, new Point(xCenter, 0), new Point(xCenter, pictureBox1.Height));
 
             // Края карты
@@ -47,22 +51,18 @@ namespace PingPong
             SolidBrush brush = new SolidBrush(ball.ColorOfBall);
             Rectangle rect = new Rectangle(x, y, 2 * ball.Radius, 2 * ball.Radius);
             g.FillEllipse(brush, rect);
+
+            // Отрисовка игрока
+            player.drawYourSelf(g);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            /*
-            Console.Write(System.DateTime.Now);
-            Console.WriteLine($"\nBefore: Ball.X = {ball.CoordOfCenterX}, " +
-                $"Ball.Y = {ball.CoordOfCenterY}\n");
-            */
-
             int newX = ball.CoordOfCenterX + ball.Steps.stepX;
             int newY = ball.CoordOfCenterY + ball.Steps.stepY;
 
             int newLeftBorderX = newX - ball.Radius;
             int newRightBorderX = newX + ball.Radius;
-
             int newTopBorderY = newY - ball.Radius;
             int newBottomBorderY = newY + ball.Radius;
 
@@ -143,11 +143,6 @@ namespace PingPong
             ball.CoordOfCenterX = newX;
             ball.CoordOfCenterY = newY;
 
-            /*
-            Console.WriteLine($"After: Ball.X = {ball.CoordOfCenterX}, " +
-               $"Ball.Y = {ball.CoordOfCenterY}\n");
-            */
-
             // Увеличение скорости мяча
             counter += timer1.Interval;
             if (counter >= MSECONDSTOSPEEDUP)
@@ -162,18 +157,9 @@ namespace PingPong
 
         private void speedUpAnimation()
         {
-            /*
-            if (timer1.Interval != 1) timer1.Interval = timer1.Interval / 2;
-            if (timer1.Interval <= 1 & ball.Steps.stepX < 50 & ball.Steps.stepY < 50)
-            {
-                ball.Steps.stepX *= 2;
-                ball.Steps.stepY *= 2;
-            }
-            */
-            //Console.WriteLine("speed = " + timer1.Interval);
             if (timer1.Interval == 1)
             {
-                if (ball.Steps.stepX < 50 & ball.Steps.stepY < 50)
+                if (ball.Steps.stepX < 20 & ball.Steps.stepY < 20)
                 {
                     ball.Steps.stepX += 5;
                     ball.Steps.stepY += 5;
@@ -194,8 +180,26 @@ namespace PingPong
         {
             AllocConsole();
 
+            //Cursor.Hide();
+
             ball = BallHelper.generateRandomBallInMiddle(pictureBox1.Width / 2, pictureBox1.Width / 2, 
                 0, pictureBox1.Height);
+
+            int width = 20;
+            int height = 100;
+            int xCoord = pictureBox1.Width - 2 * width;
+            int yCoord = pictureBox1.Height / 2 - height / 2;
+            player = new Player(xCoord, yCoord, width, height);
+
+            Point mid = player.getMiddlePoint();
+            Console.WriteLine($"init mid point {mid}");
+            Console.WriteLine($"init player point {player.getLocation()}");
+            /*
+             * pictureBox1.PointToClient(Cursor.Position) - проецирует расположение курсора на экране в разположение на элементе
+             * pictureBox1.PointToScreen(Cursor.Position) - обратное от предыдущего преобразование
+             */
+            Cursor.Position = pictureBox1.PointToScreen(mid);
+            Console.WriteLine($"init curse points {pictureBox1.PointToClient(Cursor.Position)}");
 
             timer1.Start();
             timer1.Interval = 30;
@@ -205,5 +209,52 @@ namespace PingPong
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
+        /*
+         * Перемещение игрока по полю. Считается что курсор всегда указывает на центр фигуры
+         */
+        private void ChangeCanvas_MouseMove(object sender, MouseEventArgs e) { }
+
+        /*
+         * Примечание: первое же движение происходит при первоначальной настройке положения курсора
+         */
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            Point l = e.Location;
+            Console.WriteLine($"MouseEvent: {l}");
+            //Console.WriteLine($"Cursor: {Cursor.Position}");
+            Console.WriteLine($"Cursor(on panel): {pictureBox1.PointToClient(Cursor.Position)}\n");
+
+            /*
+            // Если игрок пытается пересечь линию по середине
+            if (l.X <= pictureBox1.Width / 2 + MIDLINEWIDTH / 2 + player.getWidth() / 2)
+            {
+                Cursor.Position = player.getMiddlePoint();
+            }
+
+            // Если игрок пытается уйти в правый край
+            if (l.X >= pictureBox1.Width - player.getWidth() / 2)
+            {
+                Cursor.Position = player.getMiddlePoint();
+            }
+
+            // Если игро пытается уйти слишком вверх
+            if (l.Y <= 0 + player.getHeight() / 2)
+            {
+                Cursor.Position = player.getMiddlePoint();
+            }
+
+            // Если игрок пытается уйти слишком вниз
+            if (l.Y >= pictureBox1.Height - player.getHeight() / 2)
+            {
+                Cursor.Position = player.getMiddlePoint();
+            }
+            */
+
+            // Вычисляет x и y угловые точки прямоугольника по заданной середине прямоугольника
+            player.changeMiddlePosition(l.X, l.Y);
+            
+
+            pictureBox1.Invalidate();
+        }
     }
 }
