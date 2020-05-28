@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace PingPong
 {
+    /// <summary>
+    /// Класс, который просто фиксирует счёт и может привести его в форму для вывода на Label
+    /// </summary>
     class ScorePanel
     {
         public int PlayerAI { get; set; }

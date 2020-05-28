@@ -141,6 +141,10 @@ namespace PingPong
             int newTopBorderY = newY - ball.Radius;
             int newBottomBorderY = newY + ball.Radius;
 
+            /*
+             * Если здесь изменть простое вхождение на проверку вхождения всех X о конца поля, тогда 
+             * шар не будет проходить сквозь ракетка
+             */
             // Если шар споткнулся об игрока слева
             if (player.isIncludeThisPoint(newRightBorderX, newY))
             {
