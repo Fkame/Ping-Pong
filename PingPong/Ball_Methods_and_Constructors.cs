@@ -10,15 +10,15 @@ namespace PingPong
 {
     partial class Ball
     {
-        public Ball() : this(20) { }
-        public Ball(int radius) : this(radius, 10, 10) { }
-        public Ball(int radius, int coordOfCenterX, int coordOfCenterY)
-            : this(radius, coordOfCenterX, coordOfCenterY, System.Drawing.Color.Chocolate) { }
-        public Ball(int radius, int coordOfCenterX, int coordOfCenterY, System.Drawing.Color color)
+        public Ball(int radius, int coordOfCenterX, 
+            int coordOfCenterY, int stepX, int stepY, 
+            System.Drawing.Color color)
         {
             this.Radius = radius;
             this.CoordOfCenterX = coordOfCenterX;
             this.CoordOfCenterY = coordOfCenterY;
+            this.Steps.stepX = stepX;
+            this.Steps.stepY = stepY;
             this.ColorOfBall = color;
         }
 
@@ -34,7 +34,6 @@ namespace PingPong
             int r = this.Radius;
             return (Math.Pow((x - x0), 2) + Math.Pow((y - y0), 2) <= r * r);
         }
-        
         
      }
 }

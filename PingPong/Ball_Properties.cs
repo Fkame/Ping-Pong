@@ -17,7 +17,7 @@ namespace PingPong
         // Количество пикселей в секунду
        // public int Speed { get; set; }
 
-        public (int stepX, int stepY) steps;
+        public (int stepX, int stepY) Steps;
 
         public int Radius
         {

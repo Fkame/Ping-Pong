@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PingPong
 {
@@ -53,5 +54,23 @@ namespace PingPong
             }
             return b;
         }        
+
+        public static Ball generateRandomBallInMiddle(Panel panel1)
+        {
+            int radius = 20;
+
+            // Координаты вдоль линии по середине поля
+            var coords = BallHelper.generateRandomPosition(panel1.Width / 2, panel1.Width / 2,
+                radius, panel1.Height - radius);
+
+            // Сдвиг мяча по ОХ и ОУ
+            var steps = BallHelper.generateRandomSteps();
+
+            Ball ball = new Ball(radius, coords.x, coords.y, 
+                steps.stepX * 2, steps.stepY * 2, 
+                BallHelper.getRandomColor());
+
+            return ball;
+        }
     }
 }

@@ -17,6 +17,7 @@ namespace PingPong
     {
         private Ball ball;
         private int counter = 0;
+        private const int MSECONDSTOSPEEDUP = 10000;
 
         public TestForm()
         {
@@ -54,8 +55,8 @@ namespace PingPong
             Console.WriteLine($"\nBefore: Ball.X = {ball.CoordOfCenterX}, " +
                 $"Ball.Y = {ball.CoordOfCenterY}\n");
 
-            int newX = ball.CoordOfCenterX + ball.steps.stepX;
-            int newY = ball.CoordOfCenterY + ball.steps.stepY;
+            int newX = ball.CoordOfCenterX + ball.Steps.stepX;
+            int newY = ball.CoordOfCenterY + ball.Steps.stepY;
 
             int newLeftBorderX = newX - ball.Radius;
             int newRightBorderX = newX + ball.Radius;
@@ -68,8 +69,8 @@ namespace PingPong
             {
                 ball.CoordOfCenterX = 0 + ball.Radius;
                 ball.CoordOfCenterY = 0 + ball.Radius;
-                ball.steps.stepX = -ball.steps.stepX;
-                ball.steps.stepY = -ball.steps.stepY;
+                ball.Steps.stepX = -ball.Steps.stepX;
+                ball.Steps.stepY = -ball.Steps.stepY;
                 panel1.Invalidate();
                 return;
             }
@@ -77,8 +78,8 @@ namespace PingPong
             {
                 ball.CoordOfCenterX = 0 + ball.Radius;
                 ball.CoordOfCenterY = panel1.Height - ball.Radius;
-                ball.steps.stepX = -ball.steps.stepX;
-                ball.steps.stepY = -ball.steps.stepY;
+                ball.Steps.stepX = -ball.Steps.stepX;
+                ball.Steps.stepY = -ball.Steps.stepY;
                 panel1.Invalidate();
                 return;
             }
@@ -86,8 +87,8 @@ namespace PingPong
             {
                 ball.CoordOfCenterX = panel1.Width - ball.Radius;
                 ball.CoordOfCenterY = 0 + ball.Radius;
-                ball.steps.stepX = -ball.steps.stepX;
-                ball.steps.stepY = -ball.steps.stepY;
+                ball.Steps.stepX = -ball.Steps.stepX;
+                ball.Steps.stepY = -ball.Steps.stepY;
                 panel1.Invalidate();
                 return;
             }
@@ -95,8 +96,8 @@ namespace PingPong
             {
                 ball.CoordOfCenterX = panel1.Width - ball.Radius;
                 ball.CoordOfCenterY = panel1.Height - ball.Radius;
-                ball.steps.stepX = -ball.steps.stepX;
-                ball.steps.stepY = -ball.steps.stepY;
+                ball.Steps.stepX = -ball.Steps.stepX;
+                ball.Steps.stepY = -ball.Steps.stepY;
                 panel1.Invalidate();
                 return;
             }
@@ -106,7 +107,7 @@ namespace PingPong
             {
                 ball.CoordOfCenterX = 0 + ball.Radius;
                 ball.CoordOfCenterY = newY;
-                ball.steps.stepX = -ball.steps.stepX;
+                ball.Steps.stepX = -ball.Steps.stepX;
                 panel1.Invalidate();
                 return;
             }
@@ -114,7 +115,7 @@ namespace PingPong
             {
                 ball.CoordOfCenterX = panel1.Width - ball.Radius;
                 ball.CoordOfCenterY = newY;
-                ball.steps.stepX = -ball.steps.stepX;
+                ball.Steps.stepX = -ball.Steps.stepX;
                 panel1.Invalidate();
                 return;
             }
@@ -124,7 +125,7 @@ namespace PingPong
             {
                 ball.CoordOfCenterX = newX;
                 ball.CoordOfCenterY = 0 + ball.Radius;
-                ball.steps.stepY = -ball.steps.stepY;
+                ball.Steps.stepY = -ball.Steps.stepY;
                 panel1.Invalidate();
                 return;
             }
@@ -132,7 +133,7 @@ namespace PingPong
             {
                 ball.CoordOfCenterX = newX;
                 ball.CoordOfCenterY = panel1.Height - ball.Radius;
-                ball.steps.stepY = -ball.steps.stepY;
+                ball.Steps.stepY = -ball.Steps.stepY;
                 panel1.Invalidate();
                 return;
             }
@@ -142,23 +143,27 @@ namespace PingPong
             
             Console.WriteLine($"After: Ball.X = {ball.CoordOfCenterX}, " +
                $"Ball.Y = {ball.CoordOfCenterY}\n");
-
-            
+    
+            // Увеличение скорости мяча
             counter += timer1.Interval;
-            if (counter >= 3000)
+            if (counter >= MSECONDSTOSPEEDUP)
             {
                 counter = 0;
-                if (timer1.Interval != 1) timer1.Interval = timer1.Interval / 2;
-                if (timer1.Interval <= 10)
-                {
-                    ball.steps.stepX *= 2;
-                    ball.steps.stepY *= 2;
-               
-                }
+                this.speedUpAnimation();
             }
 
             // Перерисовка
             panel1.Invalidate();
+        }
+
+        private void speedUpAnimation()
+        {
+            if (timer1.Interval != 1) timer1.Interval = timer1.Interval / 2;
+            if (timer1.Interval <= 10 & ball.Steps.stepX < 50 & ball.Steps.stepY < 50)
+            {
+                ball.Steps.stepX *= 2;
+                ball.Steps.stepY *= 2;
+            }
         }
 
         /*
@@ -170,19 +175,7 @@ namespace PingPong
 
             this.DoubleBuffered = true;
 
-            int radius = 20;
-
-            // Координаты вдоль линии по середине поля
-            var coords = BallHelper.generateRandomPosition(panel1.Width / 2, panel1.Width / 2,
-                radius, panel1.Height - radius);
-
-            // Сдвиг мяча по ОХ и ОУ
-            var steps = BallHelper.generateRandomSteps();
-
-            ball = new Ball(radius, coords.x, coords.y, BallHelper.getRandomColor());
-
-            ball.steps.stepX = steps.stepX * 2;
-            ball.steps.stepY = steps.stepY * 2;
+            ball = BallHelper.generateRandomBallInMiddle(panel1);
 
             timer1.Start();
             timer1.Interval = 60;
