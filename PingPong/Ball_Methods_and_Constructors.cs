@@ -34,5 +34,7 @@ namespace PingPong
             int r = this.Radius;
             return (Math.Pow((x - x0), 2) + Math.Pow((y - y0), 2) <= r * r);
         }
+        
+        
      }
 }

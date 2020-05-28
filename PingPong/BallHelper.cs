@@ -23,6 +23,35 @@ namespace PingPong
 
             return (x, y);
         }
-        
+
+        /*
+         * Генерируются случайные числа - шаги в пикселях по OX и OY и по возможности сокращаются
+         */
+        public static (int stepX, int stepY) generateRandomSteps()
+        {
+            int stepX = new Random().Next(-10, 10);
+            stepX = (stepX == 0) ? 1 : stepX;
+            int stepY = new Random().Next(-10, 10);
+            stepY = (stepY == 0) ? 3 : stepY;
+            int nod = NOD(stepX, stepY);
+            if (nod != stepX || nod != stepY)
+            {
+                stepX = stepX / nod;
+                stepY = stepY / nod;
+            }
+            return (stepX, stepY);
+        }
+
+        private static int NOD(int a, int b)
+        {
+            while (a != b)
+            {
+                if (a >b)
+                    a = a - b;
+                else
+                    b = b - a;
+            }
+            return b;
+        }        
     }
 }

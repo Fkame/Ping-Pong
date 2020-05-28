@@ -13,7 +13,11 @@ namespace PingPong
         private int coordOfCenterX;
         private int coordOfCenterY;
         public System.Drawing.Color ColorOfBall { get; set; }
-        public int Speed { get; set; }
+        
+        // Количество пикселей в секунду
+       // public int Speed { get; set; }
+
+        public (int stepX, int stepY) steps;
 
         public int Radius
         {

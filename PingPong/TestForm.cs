@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace PingPong
 {
@@ -48,15 +49,60 @@ namespace PingPong
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            Console.WriteLine(System.DateTime.Now);
+            Console.Write(System.DateTime.Now);
+            Console.WriteLine($"\nBefore: Ball.X = {ball.CoordOfCenterX}, " +
+                $"Ball.Y = {ball.CoordOfCenterY}\n");
 
-            // Вычисления положения мяча
+            int newX = ball.CoordOfCenterX + ball.steps.stepX;
+            int newY = ball.CoordOfCenterY + ball.steps.stepY;
 
+            int newLeftBorderX = newX - ball.Radius;
+            int newRightBorderX = newX + ball.Radius;
+            if (newLeftBorderX <= 0)
+            {
+                ball.CoordOfCenterX = 0 + ball.Radius;
+                ball.CoordOfCenterY = newY;
+                ball.steps.stepX = -ball.steps.stepX;
+                panel1.Invalidate();
+                return;
+            }
+            if (newRightBorderX >= panel1.Width)
+            {
+                ball.CoordOfCenterX = panel1.Width - ball.Radius;
+                ball.CoordOfCenterY = newY;
+                ball.steps.stepX = -ball.steps.stepX;
+                panel1.Invalidate();
+                return;
+            }
+
+            int newTopBorderY = newY - ball.Radius;
+            int newBottomBorderY = newY + ball.Radius;
+            if (newTopBorderY <= 0)
+            {
+                ball.CoordOfCenterX = newX;
+                ball.CoordOfCenterY = 0 + ball.Radius;
+                ball.steps.stepY = -ball.steps.stepY;
+                panel1.Invalidate();
+                return;
+            }
+            if (newBottomBorderY >= panel1.Height)
+            {
+                ball.CoordOfCenterX = newX;
+                ball.CoordOfCenterY = panel1.Height - ball.Radius;
+                ball.steps.stepY = -ball.steps.stepY;
+                panel1.Invalidate();
+                return;
+            }
+
+            ball.CoordOfCenterX = newX;
+            ball.CoordOfCenterY = newY;
+            
+            Console.WriteLine($"After: Ball.X = {ball.CoordOfCenterX}, " +
+               $"Ball.Y = {ball.CoordOfCenterY}\n");
 
             // Перерисовка
             panel1.Invalidate();
         }
-
 
         /*
          * Запуск консоли для Debug-штук
@@ -65,18 +111,22 @@ namespace PingPong
         {
             AllocConsole();
 
-            /*
-             * Создание мяча
-             */
             int radius = 20;
+
+            // Координаты вдоль линии по середине поля
             var coords = BallHelper.generateRandomPosition(panel1.Width / 2, panel1.Width / 2,
                 radius, panel1.Height - radius);
 
+            // Сдвиг мяча по ОХ и ОУ
+            var steps = BallHelper.generateRandomSteps();
+
             ball = new Ball(radius, coords.x, coords.y, BallHelper.getRandomColor());
 
+            ball.steps.stepX = steps.stepX * 2;
+            ball.steps.stepY = steps.stepY * 2;
 
             timer1.Start();
-            timer1.Interval = 1000;
+            timer1.Interval = 100;
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]
